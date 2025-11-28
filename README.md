@@ -106,7 +106,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
-# -------------------------
 # 1. Load and preprocess data
 # -------------------------
 df = pd.read_csv("sample_heart_rate.csv", parse_dates=["timestamp"])
@@ -124,7 +123,6 @@ X = np.array(X)
 
 X_tensor = torch.tensor(X, dtype=torch.float32)
 
-# -------------------------
 # 2. Load trained model
 # -------------------------
 from lstm_model import LSTMHeartRateModel  # if model class is in notebook, redefine it here
@@ -133,7 +131,6 @@ model = LSTMHeartRateModel(input_dim=1, hidden_dim=32)
 model.load_state_dict(torch.load("model.pth", map_location="cpu"))
 model.eval()
 
-# -------------------------
 # 3. Forward pass + anomaly scoring
 # -------------------------
 with torch.no_grad():
@@ -146,7 +143,6 @@ errors = np.abs(preds.flatten() - scaled_values[seq_len:].flatten())
 threshold = np.mean(errors) + 2 * np.std(errors)
 anomalies = errors > threshold
 
-# -------------------------
 # 4. Visualization
 # -------------------------
 plt.figure(figsize=(12, 5))
@@ -155,14 +151,12 @@ plt.scatter(
     df["timestamp"][seq_len:][anomalies],
     values[seq_len:][anomalies],
     color="red",
-    label="Anomaly",
-)
+    label="Anomaly",)
 plt.legend()
 plt.title("Heart-Rate Anomaly Detection")
 plt.xlabel("Time")
 plt.ylabel("Heart Rate (bpm)")
 plt.show()
-
 ```
 
 ### **Repository Structure**
